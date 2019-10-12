@@ -12,9 +12,8 @@ task={
 }
 if __name__ == "__main__":
 	task_num=int(sys.argv[1])
-	# seed=int(sys.argv[2])
-
-	# np.random.seed(int(seed))
+	seed=int(sys.argv[2])
+	np.random.seed(int(seed))
 	if(task_num <= 2):
 		task[task_num](True)
 	else:

@@ -1,6 +1,10 @@
 import numpy as np
 
 
+def clip_exp(x):
+    return np.exp(np.clip(x, -100, 100))
+
+
 class FullyConnectedLayer:
     def __init__(self, in_nodes, out_nodes, activation):
         # Method to initialize a Fully Connected Layer
@@ -232,7 +236,7 @@ def softmax_of_X(X):
     # data : Output from current layer/input for Activation | shape: batchSize x self.out_nodes
     # Returns: Activations after one forward pass through this softmax layer | shape: batchSize x self.out_nodes
     # This will only be called for layers with activation softmax
-    exp_X = np.exp(X)
+    exp_X = clip_exp(X)
     return exp_X / np.sum(exp_X, axis=1, keepdims=True)
 
 

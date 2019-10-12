@@ -70,7 +70,7 @@ class NeuralNetwork:
 			loss = None
 			numBatches = int(np.ceil(float(X.shape[0]) / self.batchSize))
 			for batchNum in range(numBatches):
-				# print(batchNum,"/",numBatches) # TODO: UNCOMMENT if model is taking too long to train
+				# print(batchNum, "/", numBatches) # TODO: UNCOMMENT if model is taking too long to train
 				XBatch = np.asarray(X[batchNum*self.batchSize: (batchNum+1)*self.batchSize])
 				YBatch = np.asarray(Y[batchNum*self.batchSize: (batchNum+1)*self.batchSize])
 
@@ -112,8 +112,8 @@ class NeuralNetwork:
 
 	def computeLoss(self, Y, predictions):
 		# Returns the crossentropy loss function given the prediction and the true labels Y
-		# TODO: check if i need to divide by no. of examples: predictions.shape[0]
-		return -1 * np.sum(Y * np.log(predictions))
+		epsilon = 1e-10
+		return -1 * np.sum(Y * np.log(np.clip(predictions, epsilon, 1. - epsilon)))
 
 	def computeAccuracy(self, Y, predLabels):
 		# Returns the accuracy given the true labels Y and predicted labels predLabels
@@ -158,7 +158,8 @@ class NeuralNetwork:
 		# backpropagation algorithm
 		# Hint: Start with derivative of cross entropy from the last layer
 		gradients = []
-		delta = -1 * Y / activations[-1]
+		epsilon = 1e-10
+		delta = -1 * Y / np.clip(activations[-1], epsilon, 1. - epsilon)
 		i = len(activations) - 1
 		for layer in reversed(self.layers):
 			# here activations start from ending which is the cross softmax output layer

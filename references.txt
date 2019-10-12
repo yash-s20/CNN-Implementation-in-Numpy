@@ -1,0 +1,2 @@
+https://stackoverflow.com/questions/47377222/cross-entropy-function-python
+https://stackoverflow.com/questions/37044600/sudden-drop-in-accuracy-while-training-a-deep-neural-net
