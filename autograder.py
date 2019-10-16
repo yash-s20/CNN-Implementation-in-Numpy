@@ -128,7 +128,13 @@ def grade1():
 def grade2():
     print('='*20 + ' TASK 2 - Forward + Backward Pass' + '='*20)
     marks = 0
-    
+
+    try:
+        net, xtest, ytest = test.task[1](False)
+        marks += test_net(net, xtest, ytest)
+    except:
+        print("RunTimeError in Task 2.1")
+
     try:
         net, xtest, ytest = test.task[2](False)
         marks += test_net(net, xtest, ytest)
@@ -145,10 +151,10 @@ def grade2():
 
     try:
         net, xtest, ytest, name = test.task[4]()
-        model = np.load(name)
-        k,i = 0,0
+        model = np.load(name, allow_pickle=True)
+        k, i = 0, 0
         for l in net.layers:
-            if type(l).__name__ != "AvgPoolingLayer" and type(l).__name__ != "FlattenLayer": 
+            if type(l).__name__ != "AvgPoolingLayer" and type(l).__name__ != "FlattenLayer":
                 net.layers[i].weights = model[k]
                 net.layers[i].biases = model[k+1]
                 k+=2

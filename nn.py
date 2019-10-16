@@ -158,7 +158,6 @@ class NeuralNetwork:
 		# This method adjusts the weights(self.layers's weights) and biases(self.layers's biases) as calculated from the
 		# backpropagation algorithm
 		# Hint: Start with derivative of cross entropy from the last layer
-		gradients = []
 		epsilon = 1e-10
 		delta = -1 * Y / np.clip(activations[-1], epsilon, 1. - epsilon)
 		i = len(activations) - 1
