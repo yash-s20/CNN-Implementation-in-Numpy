@@ -1,2 +1,4 @@
 https://stackoverflow.com/questions/47377222/cross-entropy-function-python
 https://stackoverflow.com/questions/37044600/sudden-drop-in-accuracy-while-training-a-deep-neural-net
+https://stackoverflow.com/questions/43086557/convolve2d-just-by-using-numpy - idea taken off here for using strides
+https://stackoverflow.com/questions/48097941/strided-convolution-of-2d-in-numpy

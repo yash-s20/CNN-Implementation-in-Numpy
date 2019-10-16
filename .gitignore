@@ -6,3 +6,4 @@ testcases/
 *.png
 **/*.png
 log/
+*.pyc

@@ -130,21 +130,21 @@ def grade2():
     marks = 0
     
     try:
-        net, xtest, ytest = test.task[1](False)
+        net, xtest, ytest = test.task[2](False)
         marks += test_net(net, xtest, ytest)
     except:
         print("RunTimeError in Task 2.1")
 
 
     try:
-        net, xtest, ytest = test.task[2]()
+        net, xtest, ytest = test.task[3]()
         marks += 3 * test_net(net, xtest, ytest)
     except:
         print("RunTimeError in Task 2.3")
 
 
     try:
-        net, xtest, ytest, name = test.task[3]()
+        net, xtest, ytest, name = test.task[4]()
         model = np.load(name)
         k,i = 0,0
         for l in net.layers:

@@ -45,7 +45,7 @@ def taskSquare(draw):
     nn1 = init_constant_nn(['relu', 'softmax'], XTrain.shape[1], YTrain.shape[1], hidden_nodes, alpha, batch_size, epochs)
 
     ###############################################
-    nn1.train(XTrain, YTrain, XVal, YVal, False, False)
+    nn1.train(XTrain, YTrain, XVal, YVal, False, True)
     pred, acc = nn1.validate(XTest, YTest)
     print('Test Accuracy ', acc)
     # Run script visualizeTruth.py to visualize ground truth. Run command 'python3 visualizeTruth.py 2'
@@ -58,7 +58,7 @@ def taskSquare(draw):
 def taskSemiCircle(draw):
     XTrain, YTrain, XVal, YVal, XTest, YTest = readSemiCircle()
     # Create a NeuralNetwork object 'nn1' as follows with optimal parameters. For parameter definition, refer to nn.py file.
-    # nn1 = nn.NeuralNetwork(out_nodes, alpha, batchSize, epochs)
+    # nn1 = nn.NeuralNetwork(out_nodes, alp, batchSize, epochs)
     # Add layers to neural network corresponding to inputs and outputs of given data
     # Eg. nn1.addLayer(FullyConnectedLayer(x,y))
     ###############################################
@@ -105,7 +105,6 @@ def taskMnist():
 
 def taskCifar10():
     XTrain, YTrain, XVal, YVal, XTest, YTest = readCIFAR10()
-    print(XTrain.shape, XVal.shape, XTest.shape)
 
     XTrain = XTrain[0:5000, :, :, :]
     XVal = XVal[0:1000, :, :, :]
@@ -121,14 +120,34 @@ def taskCifar10():
     # # Eg. nn1.addLayer(FullyConnectedLayer(x,y))
     # ###############################################
     # # TASK 2.4 - YOUR CODE HERE
-    epochs = 20
+    epochs = 100
     alpha = 1e-2
     batch_size = 50
-    hidden_nodes = 32
+    kernel1 = (5, 5)
+    kernel2 = (4, 4)
+    filters = 32
+    conv_out = 10
+    stride1 = 3
+    stride2 = 2
+    hidden_nodes = filters * 4 * 4
 
-    nn1 = init_constant_nn(['relu', 'softmax'], np.prod(XTrain.shape[1:]), YTrain.shape[1], hidden_nodes, alpha, batch_size, epochs)
+
+    nn1 = nn.NeuralNetwork(YTrain.shape[1], alpha, batch_size, epochs)
+    # current precision without CNN is close to 29% on test.
+
+    # 3 x 32 x 32 to 32 x 10 x 10
+    nn1.addLayer(ConvolutionLayer(XTrain.shape[1:], kernel1, filters, stride1, 'relu'))
+
+    # 32 x 10 x 10 to 32 x 4 x 4
+    nn1.addLayer(AvgPoolingLayer((filters, conv_out, conv_out), kernel2, stride2))
+
+    # 32 x 4 x 4 to 512
+    nn1.addLayer(FlattenLayer())
+
+    # 512 to 10
+    nn1.addLayer(FullyConnectedLayer(hidden_nodes, YTrain.shape[1], 'softmax'))
     ###################################################
-    nn1.train(XTrain.reshape([XTrain.shape[0], -1]), YTrain, XVal.reshape([XVal.shape[0], -1]), YVal, True, True, loadModel=False, saveModel=True, modelName=modelName)
-    pred, acc = nn1.validate(XTest.reshape([XTest.shape[0], -1]), YTest)
+    nn1.train(XTrain, YTrain, XVal, YVal, True, True, loadModel=False, saveModel=True, modelName=modelName)
+    pred, acc = nn1.validate(XTest, YTest)
     print('Test Accuracy ', acc)
     return nn1,  XTest, YTest, modelName # UNCOMMENT THIS LINE WHILE SUBMISSION

@@ -70,7 +70,7 @@ class NeuralNetwork:
 			loss = None
 			numBatches = int(np.ceil(float(X.shape[0]) / self.batchSize))
 			for batchNum in range(numBatches):
-				# print(batchNum, "/", numBatches) # TODO: UNCOMMENT if model is taking too long to train
+				# print(batchNum, "/", numBatches)
 				XBatch = np.asarray(X[batchNum*self.batchSize: (batchNum+1)*self.batchSize])
 				YBatch = np.asarray(Y[batchNum*self.batchSize: (batchNum+1)*self.batchSize])
 
@@ -142,6 +142,7 @@ class NeuralNetwork:
 		# Returns the activations at each layer(starting from the first layer(input layer)) to
 		# the output layer of the network as a list of np multi-dimensional arrays
 		# Note: Activations at the first layer(input layer) is X itself
+		# print(X.shape)
 		activations = [np.copy(X)]
 		prev_activation = activations[-1]
 		for layer in self.layers:
