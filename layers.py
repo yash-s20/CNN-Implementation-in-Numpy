@@ -51,7 +51,7 @@ class FullyConnectedLayer:
 
     ###############################################
 
-    def backwardpass(self, lr, activation_prev, delta):
+    def backwardpass(self, lr, activation_prev, delta, reg=False, lmbda=0.01):
         # Input
         # lr : learning rate of the neural network
         # activation_prev : Activations from previous layer
@@ -76,6 +76,10 @@ class FullyConnectedLayer:
         del_e_p = inp_delta @ self.weights.T
         self.biases -= lr * np.mean(inp_delta, axis=0).reshape([1, -1])
         self.weights -= lr * del_e_w
+
+        if reg:
+            self.biases -= lr * lmbda * self.biases
+            self.weights -= lr * lmbda * self.weights
         return del_e_p
     ###############################################
 
@@ -134,7 +138,7 @@ class ConvolutionLayer:
 
     ###############################################
 
-    def backwardpass(self, lr, activation_prev, delta):
+    def backwardpass(self, lr, activation_prev, delta, reg=False, lmbda=0.01):
         # Input
         # lr : learning rate of the neural network
         # activation_prev : Activations from previous layer
@@ -168,20 +172,14 @@ class ConvolutionLayer:
         for i in range(self.out_row):
             for j in range(self.out_col):
                 self.weights -= lr * np.mean(np.einsum('no,nirc->noirc', inp_delta[:, :, i, j], activation_prev[:, :, i*s:i*s+r, j*s:j*s+c]), axis=0)
+
         self.biases -= lr * np.mean(np.sum(inp_delta.reshape([n, self.out_depth, -1]), axis=-1), axis=0)
+
+        if reg:
+            self.weights -= lr * lmbda * self.weights
+            self.biases -= lr * lmbda * self.biases
         return back_delta
     ###############################################
-
-
-def my_convolve_2d(single_channel, conv_matrix, stride, out_shape):
-    # might need these - tile, transpose, max, argmax, repeat, dot, matmul
-    sub_shape = conv_matrix.shape
-    view_shape = tuple(np.subtract(single_channel.shape, sub_shape) // stride + 1) + sub_shape
-    s0, s1 = single_channel.strides
-    strides = (stride * s0, stride * s1, s0, s1)
-    sub_matrices = np.lib.stride_tricks.as_strided(single_channel, view_shape, strides)
-    m = np.einsum('ij,ijkl->kl', conv_matrix, sub_matrices.T).T
-    return m
 
 
 class AvgPoolingLayer:
@@ -228,7 +226,7 @@ class AvgPoolingLayer:
 
     ###############################################
 
-    def backwardpass(self, alpha, activation_prev, delta):
+    def backwardpass(self, alpha, activation_prev, delta, reg=None, lmda=None):
         # Input
         # lr : learning rate of the neural network
         # activation_prev : Activations from previous layer

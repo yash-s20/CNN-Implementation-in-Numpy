@@ -40,7 +40,7 @@ def taskSquare(draw):
     epochs = 50
     alpha = 0.01
     batch_size = 20
-    hidden_nodes = 7
+    hidden_nodes = 4
 
     nn1 = init_constant_nn(['relu', 'softmax'], XTrain.shape[1], YTrain.shape[1], hidden_nodes, alpha, batch_size, epochs)
 
@@ -67,7 +67,7 @@ def taskSemiCircle(draw):
     epochs = 50
     alpha = 0.01
     batch_size = 20
-    hidden_nodes = 8
+    hidden_nodes = 2
     nn1 = init_constant_nn(['relu', 'softmax'], XTrain.shape[1], YTrain.shape[1], hidden_nodes, alpha, batch_size, epochs)
     ###############################################
     nn1.train(XTrain, YTrain, XVal, YVal, False, True)
@@ -90,7 +90,7 @@ def taskMnist():
     # TASK 2.3 - YOUR CODE HERE
 
     ### DO NOT TOUCH THIS - gives good accuracy for some seed - 91.25% ###
-    epochs = 10
+    epochs = 15
     alpha = 1e-2
     batch_size = 50
     hidden_nodes = 20
@@ -106,12 +106,12 @@ def taskMnist():
 def taskCifar10():
     XTrain, YTrain, XVal, YVal, XTest, YTest = readCIFAR10()
 
-    XTrain = XTrain[0:5000, :, :, :]
-    XVal = XVal[0:1000, :, :, :]
-    XTest = XTest[0:1000, :, :, :]
-    YVal = YVal[0:1000, :]
-    YTest = YTest[0:1000, :]
-    YTrain = YTrain[0:5000, :]
+    # XTrain = XTrain[0:5000, :, :, :]
+    # XVal = XVal[0:1000, :, :, :]
+    # XTest = XTest[0:1000, :, :, :]
+    # YVal = YVal[0:1000, :]
+    # YTest = YTest[0:1000, :]
+    # YTrain = YTrain[0:5000, :]
 
     modelName = 'model.npy'
     # # Create a NeuralNetwork object 'nn1' as follows with optimal parameters. For parameter definition, refer to nn.py file.
@@ -122,7 +122,7 @@ def taskCifar10():
     # # TASK 2.4 - YOUR CODE HERE
     epochs = 100
     alpha = 1e-2
-    batch_size = 50
+    batch_size = 200  # 50 for smaller training data
     kernel1 = (5, 5)
     kernel2 = (4, 4)
     filters = 32
@@ -135,16 +135,17 @@ def taskCifar10():
     nn1 = nn.NeuralNetwork(YTrain.shape[1], alpha, batch_size, epochs)
     # current precision without CNN is close to 29% on test.
 
-    # 3 x 32 x 32 to 32 x 10 x 10
+    # n = 200 on 40000 training examples and n = 50 for 5000 training examples
+    # n x 3 x 32 x 32 to n x 32 x 10 x 10
     nn1.addLayer(ConvolutionLayer(XTrain.shape[1:], kernel1, filters, stride1, 'relu'))
 
-    # 32 x 10 x 10 to 32 x 4 x 4
+    # n x 32 x 10 x 10 to n x 32 x 4 x 4
     nn1.addLayer(AvgPoolingLayer((filters, conv_out, conv_out), kernel2, stride2))
 
-    # 32 x 4 x 4 to 512
+    # n x 32 x 4 x 4 to n x 512
     nn1.addLayer(FlattenLayer())
 
-    # 512 to 10
+    # n x 512 to n x 10
     nn1.addLayer(FullyConnectedLayer(hidden_nodes, YTrain.shape[1], 'softmax'))
     ###################################################
     nn1.train(XTrain, YTrain, XVal, YVal, True, True, loadModel=False, saveModel=True, modelName=modelName)

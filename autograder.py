@@ -128,13 +128,14 @@ def grade1():
 def grade2():
     print('='*20 + ' TASK 2 - Forward + Backward Pass' + '='*20)
     marks = 0
-
+    np.random.seed(42)
     try:
         net, xtest, ytest = test.task[1](False)
         marks += test_net(net, xtest, ytest)
     except:
         print("RunTimeError in Task 2.1")
 
+    np.random.seed(42)
     try:
         net, xtest, ytest = test.task[2](False)
         marks += test_net(net, xtest, ytest)
@@ -142,6 +143,7 @@ def grade2():
         print("RunTimeError in Task 2.1")
 
 
+    np.random.seed(42)
     try:
         net, xtest, ytest = test.task[3]()
         marks += 3 * test_net(net, xtest, ytest)
@@ -149,6 +151,7 @@ def grade2():
         print("RunTimeError in Task 2.3")
 
 
+    np.random.seed(42)
     try:
         net, xtest, ytest, name = test.task[4]()
         model = np.load(name, allow_pickle=True)
@@ -197,6 +200,3 @@ if len(sys.argv) < 3:
     sys.exit(1)
 
 locals()['grade' + str(int(sys.argv[2]))]()
-
-
-
