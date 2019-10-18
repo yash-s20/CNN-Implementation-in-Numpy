@@ -36,7 +36,7 @@ def grade1():
     
         output_X = input_X
 
-        output_X = gradient_relu_of_X(output_X, input_delta)
+        output_X = gradient_relu_of_X(output_X)
 
         studentAnswer = output_X
         teacherAnswer = load_test_case['gardient_relu_output']

@@ -37,8 +37,8 @@ def taskSquare(draw):
     # Eg. nn1.addLayer(FullyConnectedLayer(x,y))
     ###############################################
     # TASK 2.1 - YOUR CODE HERE
-    epochs = 50
-    alpha = 0.01
+    epochs = 10
+    alpha = 0.1
     batch_size = 20
     hidden_nodes = 4
 
@@ -64,8 +64,8 @@ def taskSemiCircle(draw):
     ###############################################
     # TASK 2.2 - YOUR CODE HERE
     # raise NotImplementedError
-    epochs = 50
-    alpha = 0.01
+    epochs = 15
+    alpha = 0.1
     batch_size = 20
     hidden_nodes = 2
     nn1 = init_constant_nn(['relu', 'softmax'], XTrain.shape[1], YTrain.shape[1], hidden_nodes, alpha, batch_size, epochs)
@@ -90,8 +90,8 @@ def taskMnist():
     # TASK 2.3 - YOUR CODE HERE
 
     ### DO NOT TOUCH THIS - gives good accuracy for some seed - 91.25% ###
-    epochs = 15
-    alpha = 1e-2
+    epochs = 5
+    alpha = 1e-1
     batch_size = 50
     hidden_nodes = 20
     nn1 = init_constant_nn(['relu', 'relu', 'softmax'], XTrain.shape[1],
@@ -120,8 +120,8 @@ def taskCifar10():
     # # Eg. nn1.addLayer(FullyConnectedLayer(x,y))
     # ###############################################
     # # TASK 2.4 - YOUR CODE HERE
-    epochs = 100
-    alpha = 1e-2
+    epochs = 50
+    alpha = 0.1
     batch_size = 200  # 50 for smaller training data
     kernel1 = (5, 5)
     kernel2 = (4, 4)
@@ -130,7 +130,6 @@ def taskCifar10():
     stride1 = 3
     stride2 = 2
     hidden_nodes = filters * 4 * 4
-
 
     nn1 = nn.NeuralNetwork(YTrain.shape[1], alpha, batch_size, epochs)
     # current precision without CNN is close to 29% on test.
@@ -142,11 +141,19 @@ def taskCifar10():
     # n x 32 x 10 x 10 to n x 32 x 4 x 4
     nn1.addLayer(AvgPoolingLayer((filters, conv_out, conv_out), kernel2, stride2))
 
+    # implementation 1 - 55.32 %
     # n x 32 x 4 x 4 to n x 512
     nn1.addLayer(FlattenLayer())
 
     # n x 512 to n x 10
     nn1.addLayer(FullyConnectedLayer(hidden_nodes, YTrain.shape[1], 'softmax'))
+
+    # implementation 2 - similar - had been trained earlier on lesser tuned params
+    # n x 32 x 4 x 4 to n x 10 x 1 x 1
+    # nn1.addLayer(ConvolutionLayer((filters, 4, 4), (4, 4), 10, 1, 'softmax'))
+
+    # n x 10 x 1 x 1 to n x 10
+    # nn1.addLayer(FlattenLayer())
     ###################################################
     nn1.train(XTrain, YTrain, XVal, YVal, True, True, loadModel=False, saveModel=True, modelName=modelName)
     pred, acc = nn1.validate(XTest, YTest)

@@ -39,7 +39,7 @@ class NeuralNetwork:
 		# and evaluates the validation set accuracy after each epoch of training
 		
 		if loadModel:
-			model = np.load(modelName)
+			model = np.load(modelName, allow_pickle=True)
 			k,i = 0,0
 			for l in self.layers:
 				if type(l).__name__ != "AvgPoolingLayer" and type(l).__name__ != "FlattenLayer": 
@@ -75,12 +75,12 @@ class NeuralNetwork:
 				YBatch = np.asarray(Y[batchNum*self.batchSize: (batchNum+1)*self.batchSize])
 
 				# Calculate the activations after the feedforward pass
-				activations = self.feedforward(XBatch)	
+				activations = self.feedforward(XBatch)
 
-				# Compute the loss	
+				# Compute the loss
 				loss = self.computeLoss(YBatch, activations[-1])
 				trainLoss += loss
-				
+
 				# Estimate the one-hot encoded predicted labels after the feedword pass
 				predLabels = oneHotEncodeY(np.argmax(activations[-1], axis=1), self.out_nodes)
 
