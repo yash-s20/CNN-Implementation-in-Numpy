@@ -39,7 +39,7 @@ class NeuralNetwork:
 		# and evaluates the validation set accuracy after each epoch of training
 		
 		if loadModel:
-			model = np.load(modelName, allow_pickle=True)
+			model = np.load(modelName)
 			k,i = 0,0
 			for l in self.layers:
 				if type(l).__name__ != "AvgPoolingLayer" and type(l).__name__ != "FlattenLayer": 

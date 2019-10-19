@@ -36,7 +36,7 @@ def grade1():
     
         output_X = input_X
 
-        output_X = gradient_relu_of_X(output_X)
+        output_X = gradient_relu_of_X(output_X, input_delta)
 
         studentAnswer = output_X
         teacherAnswer = load_test_case['gardient_relu_output']
@@ -119,29 +119,29 @@ def grade1():
         if check_gradient_softmax():
             marks+= 2
     except:
-        print("Error in Test Case 1.1")
+        print("Error in Test Case 1.4")
 
     
     print('Marks: {}/5'.format(marks))
     return marks
 
 def grade2():
+    np.random.seed(42)
     print('='*20 + ' TASK 2 - Forward + Backward Pass' + '='*20)
     marks = 0
-    np.random.seed(42)
+    
     try:
         net, xtest, ytest = test.task[1](False)
-        marks += test_net(net, xtest, ytest)
+        marks += 2 * test_net(net, xtest, ytest)
     except:
         print("RunTimeError in Task 2.1")
 
     np.random.seed(42)
     try:
         net, xtest, ytest = test.task[2](False)
-        marks += test_net(net, xtest, ytest)
+        marks += 2 * test_net(net, xtest, ytest)
     except:
-        print("RunTimeError in Task 2.1")
-
+        print("RunTimeError in Task 2.2")
 
     np.random.seed(42)
     try:
@@ -150,25 +150,24 @@ def grade2():
     except:
         print("RunTimeError in Task 2.3")
 
-
     np.random.seed(42)
     try:
         net, xtest, ytest, name = test.task[4]()
-        model = np.load(name, allow_pickle=True)
-        k, i = 0, 0
+        model = np.load(name)
+        k,i = 0,0
         for l in net.layers:
-            if type(l).__name__ != "AvgPoolingLayer" and type(l).__name__ != "FlattenLayer":
+            if type(l).__name__ != "AvgPoolingLayer" and type(l).__name__ != "FlattenLayer": 
                 net.layers[i].weights = model[k]
                 net.layers[i].biases = model[k+1]
                 k+=2
             i+=1
 
-        marks += 4 * test_net_diff(net, xtest, ytest)
+        marks += 5 * test_net_diff(net, xtest, ytest)
     except:
         print("RunTimeError in Task 2.4")
     
 
-    print('Marks: {}/9'.format(marks))
+    print('Marks: {}/12'.format(marks))
     return marks
 
 
@@ -200,3 +199,6 @@ if len(sys.argv) < 3:
     sys.exit(1)
 
 locals()['grade' + str(int(sys.argv[2]))]()
+
+
+

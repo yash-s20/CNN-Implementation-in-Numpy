@@ -154,8 +154,8 @@ def taskCifar10():
 
     # n x 10 x 1 x 1 to n x 10
     # nn1.addLayer(FlattenLayer())
+    return nn1,  XTest, YTest, modelName # UNCOMMENT THIS LINE WHILE SUBMISSION
     ###################################################
     nn1.train(XTrain, YTrain, XVal, YVal, True, True, loadModel=False, saveModel=True, modelName=modelName)
     pred, acc = nn1.validate(XTest, YTest)
     print('Test Accuracy ', acc)
-    return nn1,  XTest, YTest, modelName # UNCOMMENT THIS LINE WHILE SUBMISSION

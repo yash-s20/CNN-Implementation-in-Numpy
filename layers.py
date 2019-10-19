@@ -274,7 +274,7 @@ def relu_of_X(X):
     return (X > 0) * X
 
 
-def gradient_relu_of_X(X):
+def gradient_relu_of_X(X, delta=None):
     # Input
     # data : Output from next layer/input | shape: batchSize x self.out_nodes
     # delta : del_Error/ del_activation_curr | shape: batchSize x self.out_nodes
