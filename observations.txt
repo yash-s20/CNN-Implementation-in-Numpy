@@ -1,0 +1,28 @@
+Task 2.4
+
+
+Tried a task2.3 like FullyConnected Layers only model for Cifar10, with around 50 hidden nodes, did not perform so well and only got about 30 % accuracy
+Current model (in tasks.py) and also in pdf, achieves 55% accuracy on test set when trained on entire training set, and 50 % on part.
+
+Number of epochs can be reduced to 10 and the 35% bar is still crossed.
+
+
+From the report -
+4 Task 2.4 -taskCifar10
+
+This  had  to  be  done  with  a  CNN  architecture.
+A  simple  or  even  complex  feedforward architecture only gave upto 30% results.The architecture used is a very simple and toned down version of common archi-tectures found on web for CIFAR10 dataset
+Input to the first layer was of size 3×32×32 for each training example in the batch.
+Final output is predictions vectors in 10 classes for the input RGB image.
+
+Architecture -
+First layer is a ConvolutionLayer that takes 3×32×32 input image and outputs a  deep  representation  of  size 32×10×10 by  using 32×3 (out_depth  X  in_depth) convolution filters of size 5×5 with stride of 3, no padding. Activation is RELU.Second layer is an AvgPoolingLayer that downsamples the previous layers activations to give an output of size 32×4×4 by using an average filter of size 4×4, with a stride of 2.
+
+This is then flattened to give an output of 512 nodes.
+
+Finally a fully connected layer to map these 512 input nodes to 10 classes, usingsoftmax activation.Achieved a test accuracy of around 50.2 % with part of the training data (5000samples instead of 40000), and 55.32% with the entire training data.Roughly took 8 mins to train for the former, and 2 hours for the latter.
+Other hyperparamaters -
+number_of_epochs= 50
+learning_rate= 0.1
+batch_size= 200 (50f or small train)
+I didn’t increase alpha beyond 0.1 for the fear of overshooting a good minima.Around 10 epochs were enough to clear the treshold of 35% accuracy, I trained itfor longer just to see how far it goes.Going a bit outside the general implementation found online. I replaced the flattenand  FC  layers  with  another  Convolutional  Layer  (converting  input  into  10  x  1  x  1 output) using softmax activation and then squeezing the 1 size arrays using flatten.The results were very similar, and I now realise that a Convolutional Layer of this form would mathematically equate a Fully Connected layer
