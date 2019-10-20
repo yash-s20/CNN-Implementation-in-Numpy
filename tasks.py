@@ -93,7 +93,7 @@ def taskMnist():
     epochs = 5
     alpha = 1e-1
     batch_size = 50
-    hidden_nodes = 20
+    hidden_nodes = 15
     nn1 = init_constant_nn(['relu', 'relu', 'softmax'], XTrain.shape[1],
                            YTrain.shape[1], hidden_nodes, alpha, batch_size, epochs)
     ###############################################

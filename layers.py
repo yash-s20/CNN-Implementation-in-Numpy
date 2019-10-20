@@ -118,10 +118,13 @@ class ConvolutionLayer:
 
         ###############################################
         # TASK 1 - YOUR CODE HERE
+        s = self.stride
+        r = self.filter_row
+        c = self.filter_col
         sum_l = np.zeros([n, self.out_depth, self.out_row, self.out_col])
         for i in range(self.out_row):
             for j in range(self.out_col):
-                part_x = X[:, :, i*self.stride:i*self.stride + self.filter_row, j*self.stride:j*self.stride + self.filter_col]
+                part_x = X[:, :, i*s:i*s+r, j*s:j*s+c]
                 flattened_part = part_x.reshape([part_x.shape[0], part_x.shape[1], -1])
                 sum_l[:, :, i, j] = np.sum(np.einsum('nid,oid->nod', flattened_part,
                                                      self.weights.reshape(list(self.weights.shape[:2]) + [-1])), axis=-1)
@@ -220,7 +223,7 @@ class AvgPoolingLayer:
         c = self.filter_col
         for i in range(self.out_row):
             for j in range(self.out_col):
-                part_x = X[:, :, i*self.stride:i*self.stride + self.filter_row, j*self.stride:j*self.stride + self.filter_col]
+                part_x = X[:, :, i*s:i*s+r, j*s:j*s+c]
                 activation[:, :, i, j] = np.sum(np.sum(part_x * avg_matrix[np.newaxis, np.newaxis, :, :], axis=-1), axis=-1)
         return activation
 
