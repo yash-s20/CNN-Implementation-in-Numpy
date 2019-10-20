@@ -153,7 +153,7 @@ def grade2():
     np.random.seed(42)
     try:
         net, xtest, ytest, name = test.task[4]()
-        model = np.load(name)
+        model = np.load(name, allow_pickle=True)
         k,i = 0,0
         for l in net.layers:
             if type(l).__name__ != "AvgPoolingLayer" and type(l).__name__ != "FlattenLayer": 
